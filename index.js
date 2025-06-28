@@ -50,6 +50,30 @@ app.get("/api/test-db", async (req, res) => {
   }
 });
 
+app.get("/api/test-db-write", async (req, res) => {
+  try {
+    const testMember = new Member({
+      username: "testuser",
+      email: "testuser@example.com",
+      
+    });
+
+    await testMember.save();
+
+    res.status(201).send({
+      message: "Test member saved successfully",
+      member: testMember,
+      title: "Eng",
+      fieldOfStudy: "Engineering",
+      phoneOrEmail: "0988296590",
+      totalPurchaseAmountLastMonth: 5
+      
+    });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
 
 // Routes
 app.get('/', (req, res) => {
