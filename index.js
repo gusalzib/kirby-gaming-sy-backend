@@ -39,7 +39,17 @@ mongoose.connect(process.env.MONGO_URI, {
 const memberRoutes = require('./routes/members');
   
 app.use('/api/members', memberRoutes);
-  
+
+app.get("/api/test-db", async (req, res) => {
+  try {
+    const count = await Member.countDocuments();
+    res.send({ count });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
+
 // Routes
 app.get('/', (req, res) => {
   res.send('API is running...');
