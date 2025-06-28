@@ -37,7 +37,8 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 const memberRoutes = require('./routes/members');
-  
+const Member = require('./models/Member'); // adjust the path if needed
+
 app.use('/api/members', memberRoutes);
 
 app.get("/api/test-db", async (req, res) => {
