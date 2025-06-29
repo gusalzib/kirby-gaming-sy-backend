@@ -6,24 +6,25 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://kirby-gaming-sy-frontend-dep6.vercel.app', 
-];
+// const allowedOrigins = [
+//   'http://localhost:5173',
+//   'https://kirby-gaming-sy-frontend-dep6.vercel.app', 
+// ];
 
 // Middleware
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('CORS not allowed'));
-    }
-  },
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://kirby-gaming-sy-frontend-dep6.vercel.app'],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-}));
+  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+
+// Explicitly handle OPTIONS preflight
+app.options('*', cors(corsOptions));
+
 
 app.use(express.json());
 
