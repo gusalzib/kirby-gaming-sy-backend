@@ -14,16 +14,24 @@ const PORT = process.env.PORT || 5001;
 // Middleware
 
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://kirby-gaming-sy-frontend-dep6.vercel.app'],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://kirby-gaming-sy-frontend-dep6.vercel.app'
+    ];
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
-  methods: 'GET,POST,PUT,DELETE,OPTIONS',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-
-// Explicitly handle OPTIONS preflight
-app.options('*', cors(corsOptions));
 
 
 app.use(express.json());
