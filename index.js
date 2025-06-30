@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5001;
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://kirby-gaming.vercel.app', // ← Replace with your actual Vercel frontend URL
+  'https://kirby-gaming-sy-frontend-dep6.vercel.app', 
 ];
 
 // Middleware
