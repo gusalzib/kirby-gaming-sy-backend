@@ -14,6 +14,7 @@ const memberSchema = new mongoose.Schema({
     fieldOfStudy: String,
     phoneOrEmail: String,
     totalPurchaseAmountLastMonth: Number,
+    drom: String,
     visitHistory: [visitSchema]
   
 });
