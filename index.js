@@ -96,24 +96,48 @@ app.get('/api', (req, res) => {
 //   console.log(`Server running on port ${PORT}`);
 // });
 
+const webpush = require('web-push')
+
+webpush.setVapidDetails(
+  'mailto:ibrahim.alzouby1999@gmail.com',
+  process.env.VAPID_PUBLIC_KEY,
+  process.env.VAPID_PRIVATE_KEY
+)
+
+let adminPushSubscription = null // Ideally use DB for persistence
+
+app.post('/api/save-subscription', (req, res) => {
+  adminPushSubscription = req.body // You can store in MongoDB instead
+  res.status(201).json({ message: 'Subscription saved' })
+})
+
+const sendAdminNotification = (title, body) => {
+  if (!adminPushSubscription) return
+  webpush.sendNotification(adminPushSubscription, JSON.stringify({ title, body }))
+    .catch(err => console.error('Push error:', err))
+}
+
+
+
+app.post('/api/send-notification', (req, res) => {
+  const { title, body } = req.body;
+
+  if (!title || !body) {
+    return res.status(400).json({ error: 'Title and body are required' });
+  }
+
+  sendAdminNotification(title, body);
+  res.status(200).json({ message: 'Notification sent' });
+});
 
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(process.env.PORT, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT}`);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
   });
-
-
-
-
-
-  
-  // app.listen(PORT, () => {
-  //   console.log(`🚀 Server running on port ${PORT}`);
-  // });
